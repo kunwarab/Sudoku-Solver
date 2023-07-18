@@ -1,0 +1,96 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int BoardSize = 9;
+const int CellSize = 3;
+
+int board[BoardSize][BoardSize];
+
+bool check(int ch, int row, int col)
+{
+    for (int c = 0; c < BoardSize; c++)
+    {
+        if (c != col && board[row][c] == ch)
+        {
+            return 0;
+        }
+    }
+    for (int r = 0; r < BoardSize; r++)
+    {
+        if (r != row && board[r][col] == ch)
+        {
+            return 0;
+        }
+    }
+    int str = (row / CellSize) * CellSize;
+    int stc = (col / CellSize) * CellSize;
+    for (int dx = 0; dx < CellSize; dx++)
+    {
+        for (int dy = 0; dy < CellSize; dy++)
+        {
+            if (str + dx == row && stc + dy == col)
+            {
+                continue;
+            }
+            if (board[str + dx][stc + dy] == ch)
+            {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+int ans=0;
+void rec(int row,int col){
+    if(col==BoardSize){
+        rec(row+1,0);
+        return;
+    }
+    if (row==BoardSize)
+    {
+       ans++;
+       cout<<"Answer = "<<ans<<endl;
+       return;
+
+    }
+    if(board[row][col]==0){
+        for (int ch = 0; ch<=BoardSize; ch++)
+        {
+            if(check(ch,row,col)){
+                board[row][col]=ch;
+                rec(row,col+1);
+                board[row][col]=0;
+            }
+        }
+        
+    }
+    else
+    {
+        if(check(board[row][col],row,col)){
+            rec(row,col+1);
+        }
+    }
+    
+    
+}
+
+void solve()
+{
+    for (int i = 0; i < BoardSize; i++)
+    {
+        for (int j = 0; j < BoardSize; j++)
+        {
+            cin>>board[i][j];
+        }   
+    }
+    rec(0,0);
+    
+}
+signed main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    solve();
+}
